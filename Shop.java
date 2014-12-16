@@ -1,20 +1,20 @@
 public class Shop {
 	private int id = 0;
-	private String businessName = "-";
-	private String address = "-";
-	private String phoneNumber = "-";
-	private String fax = "-";
-	private long accountCurrent; // 6-14 digits
-	private String bank = "-";
-	private int bankCode; // 6 digits
-	private int codeEDRPOU; // 8 digits
-	private long inn; // 12 digits
+	private String businessName = "";
+	private String address = "";
+	private String phoneNumber = "";
+	private String fax = "";
+	private String accountCurrent = ""; // 6-14 digits, better String
+	private String bank = "";
+	private String bankCode = ""; // 6 digits, better String
+	private String codeEDRPOU = ""; // 8 digits, better String
+	private String inn = ""; // 12 digits, better String
 
 	public Shop() {}
 
 	public Shop(int id, String businessName, String address,
-				String phoneNumber, String fax, long accountCurrent,
-				String bank, int bankCode, int codeEDRPOU, long inn) {
+				String phoneNumber, String fax, String accountCurrent,
+				String bank, String bankCode, String codeEDRPOU, String inn) {
 		this.id = id;
 		this.businessName = businessName;
 		this.address = address;
@@ -27,44 +27,35 @@ public class Shop {
 		setInn(inn);
 	}
 
-	private int countDigits(long number) {
-		int size = 0;
-		while (number>0) {
-			number/=10;
-			size++;
-		}
-		return size;
-	}
-
-	private boolean checkAccountCurrent(long accountCurrent) {
-		if (countDigits(accountCurrent)>5 && countDigits(accountCurrent)<15) {
+	private boolean checkAccountCurrent(String accountCurrent) {
+		if (accountCurrent.length()>5 && accountCurrent.length()<15) {
 			return true;
 		} else return false;
 	}
 
-	private boolean checkInn(long inn) {
-		if (countDigits(inn) == 12) {
+	private boolean checkInn(String inn) {
+		if (inn.length() == 12) {
 			return true;
 		} else return false;
 	}
 
-	private boolean checkBankCode(int bankCode) {
-		if (countDigits(bankCode) == 6) {
+	private boolean checkBankCode(String bankCode) {
+		if (bankCode.length() == 6) {
 			return true;
 		} else return false;
 	}
 
-	private boolean checkCodeEDRPOU(int codeEDRPOU) {
-		if (countDigits(codeEDRPOU) == 8) {
+	private boolean checkCodeEDRPOU(String codeEDRPOU) {
+		if (codeEDRPOU.length() == 8) {
 			return true;
 		} else return false;
 	}
 
 	public String toString() {
-		return "\n" + getBusinessName() + "\n" + getAddress()
-			   + "\na/c " + getAccountCurrent() + "   MFO "
-			   + getBankCode() + "\nin a bank branch "
-			   + getBank() + "\nINN" + getInn() + "\ntel.: "
+		return "\nShop id: " + getId + "\n"+ getBusinessName() + "\n"
+			   + getAddress() + "\na/c " + getAccountCurrent()
+			   + "   MFO " + getBankCode() + "\nin a bank branch "
+			   + getBank() + "\nINN " + getInn() + "\ntel.: "
 			   + getPhoneNumber() + ", fax: " + getFax() + "\n";
 	}
 
@@ -108,13 +99,13 @@ public class Shop {
 		return fax;
 	}
 
-	public void setAccountCurrent(long accountCurrent) {
+	public void setAccountCurrent(String accountCurrent) {
 		if (checkAccountCurrent(accountCurrent)) {
 			this.accountCurrent = accountCurrent;
 		}
 	}
 
-	public long getAccountCurrent() {
+	public String getAccountCurrent() {
 		return accountCurrent;
 	}
 
@@ -126,33 +117,42 @@ public class Shop {
 		return bank;
 	}
 
-	public void setBankCode(int bankCode) {
+	public void setBankCode(String bankCode) {
 		if (checkBankCode(bankCode)) {
 			this.bankCode = bankCode;
 		}
 	}
 
-	public int getBankCode() {
+	public String getBankCode() {
 		return bankCode;
 	}
 
-	public void setCodeEDRPOU(int codeEDRPOU) {
+	public void setCodeEDRPOU(String codeEDRPOU) {
 		if (checkCodeEDRPOU(codeEDRPOU)) {
 			this.codeEDRPOU = codeEDRPOU;
 		}
 	}
 
-	public int getCodeEDRPOU() {
+	public String getCodeEDRPOU() {
 		return codeEDRPOU;
 	}
 
-	public void setInn(long inn) {
+	public void setInn(String inn) {
 		if (checkInn(inn)) {
 			this.inn = inn;
 		}
 	}
 
-	public long getInn() {
+	public String getInn() {
 		return inn;
 	}
+
+	// public static void main (String[] args) {
+
+	// 	Shop shop = new Shop(1, "Foxtrot", "Panteleymovskaya str, 25",
+	// 						 "(048)236-15-45", "(048)723-15-45",
+	// 						 "260015236974525", "OTP bank", "300568",
+	// 						 "87465123", "112233445566");
+	// 	System.out.println(shop.toString());
+	// }
 }
