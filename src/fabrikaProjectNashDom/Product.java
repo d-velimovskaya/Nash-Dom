@@ -1,3 +1,4 @@
+package fabrikaProjectNashDom;
 public class Product {
 	private int id = 0;
 	private String barcode = ""; // under 14 symbols
@@ -8,22 +9,25 @@ public class Product {
 	private double primeCost = 0.00;
 	private double consumerPrice = 0.00;
 	private int stockLevel = 0;
+	private String description = "";
 
 	public Product() {}
 
 	public Product(int id, String barcode, String article,
 				   String productGroup, String productName,
 				   String unitOfMeasure, double primeCost,
-				   double consumerPrice, int stockLevel) {
-		this.int = int;
+				   double consumerPrice, int stockLevel,
+				   String description) {
+		setId(id);
 		setBarcode(barcode);
 		this.article = article;
 		this.productGroup = productGroup;
 		this.productName = productName;
 		this.unitOfMeasure = unitOfMeasure;
-		setPrimeCost(PrimeCost);
+		setPrimeCost(primeCost);
 		setConsumerPrice(consumerPrice);
 		setStockLevel(stockLevel);
+		this.setDescription(description);
 	}
 
 	private boolean checkBarcode(String barcode) {
@@ -33,7 +37,7 @@ public class Product {
 	}
 
 	private boolean checkPrimeCost(double primeCost) {
-		if (PrimeCost>0.00) {
+		if (primeCost>0.00) {
 			return true;
 		} else return false;
 	}
@@ -55,14 +59,17 @@ public class Product {
 		+ getBarcode() + "Article: " + getArticle()
 		+ "\nProduct Group: " + getProductGroup()
 		+ "\nProduct Name: " + getProductName()
-		+ "\nProduct Quantity: " + getStockevel()
+		+ "\nProduct Quantity: " + getStockLevel()
 		+ getUnitOfMeasure() + "\nProduct Final Cost = "
 		+ getPrimeCost() + "\nProduct Consumer Price = "
-		+ getConsumerPrice() + "\n";
+		+ getConsumerPrice() + "\nProduct Description:"
+		+ getDescription();
 	}
-
+	
 	public void setId(int id) {
-		this.id = id;
+		if (id > 0) {
+			this.id = id;
+		}
 	}
 
 	public int getId() {
@@ -70,73 +77,69 @@ public class Product {
 	}
 
 	public void setBarcode(String barcode) {
-		if(checkBarcode) {
+		if(checkBarcode(barcode)) {
 			this.barcode = barcode;
 		}
 	}
 
-	public int getBarcode() {
+	public String getBarcode() {
 		return barcode;
 	}
 
-	public void setArticle(int article) {
+	public void setArticle(String article) {
 		this.article = article;
 	}
 
-	public int getArticle() {
+	public String getArticle() {
 		return article;
 	}
 
-	public void setProductGroup(int productGroup) {
+	public void setProductGroup(String productGroup) {
 		this.productGroup = productGroup;
 	}
 
-	public int getProductGroup() {
+	public String getProductGroup() {
 		return productGroup;
 	}
 
-	public void setProductName(int productName) {
+	public void setProductName(String productName) {
 		this.productName = productName;
 	}
 
-	public int getProductName() {
+	public String getProductName() {
 		return productName;
 	}
 
-	public void setUnitOfMeasure(int unitOfMeasure) {
+	public void setUnitOfMeasure(String unitOfMeasure) {
 		this.unitOfMeasure = unitOfMeasure;
 	}
 
-	public int getUnitOfMeasure() {
+	public String getUnitOfMeasure() {
 		return unitOfMeasure;
 	}
 
-	public void setPrimeCost(int primeCost) {
-		if (checkPrimeCost) {
+	public void setPrimeCost(double primeCost) {
+		if (checkPrimeCost(primeCost)) {
 			this.primeCost = primeCost;
 		}
 	}
 
-	public int getPrimeCost() {
+	public double getPrimeCost() {
 		return primeCost;
 	}
 	
-	/*СЂРѕР·РЅРёС‡РЅР°СЏ С†РµРЅР° С‚РѕРІР°СЂР° РїРѕР»СѓС‡Р°РµС‚СЃСЏ РёР· РµРіРѕ СЃРµР±РµСЃС‚РѕРёРјРѕСЃС‚Рё
-	*50% РЅР°РґР±Р°РІРєРѕР№ СЃРµР±РµСЃС‚РѕРёРјРѕСЃС‚Рё Рё РѕРєСЂСѓРіР»РµРЅРёРµРј
-	*/
-
-	public void setConsumerPrice(int primeCost) {
-		if (checkPrimeCost) {
-			this.consumerPrice = Math.round(primeCost*1.5);
+	public void setConsumerPrice(double consumerPrice) {
+		if (checkConsumerPrice(consumerPrice)) {
+			this.consumerPrice = consumerPrice;
 		}
 	}
 
-	public int getConsumerPrice() {
+	public double getConsumerPrice() {
 		return consumerPrice;
 	}
 
 	public void setStockLevel(int stockLevel) {
-		if (checkStockLevel) {
+		if (checkStockLevel(stockLevel)) {
 			this.stockLevel = stockLevel;
 		}
 	}
@@ -146,15 +149,23 @@ public class Product {
 	}
 
 	/*
-	*РћР±РЅРѕРІР»СЏРµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ РґР°РЅРЅРѕРіРѕ С‚РѕРІР°СЂР° РЅР° СЃРєР»Р°РґРµ, 
-	*РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РµРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° РІ
-	*РїСЂРёС…РѕРґРЅРѕР№ РЅР°РєР»Р°РґРЅРѕР№ РёР»Рё РїСЂРё РїСЂРѕРґР°Р¶Рµ.
+	*Обновляет количество данного товара на складе, 
+	*в зависимости от его количества в
+	*приходной накладной или при продаже.
 	*/
 
 	public void updateStockLevel(int productSupply,
 								 int productSale) {
 		this.stockLevel = this.stockLevel + productSupply
 						  - productSale;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

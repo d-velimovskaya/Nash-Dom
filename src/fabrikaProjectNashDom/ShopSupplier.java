@@ -1,21 +1,24 @@
-public class Shop {
+package fabrikaProjectNashDom;
+public class ShopSupplier {
 	private int id = 0;
+	private boolean checkMark = false;// if it's Shop: checkMark=true, if Supplier: checkMark=false
 	private String businessName = "";
 	private String address = "";
 	private String phoneNumber = "";
 	private String fax = "";
-	private String accountCurrent = ""; // 6-14 digits, better String
+	private String accountCurrent = ""; // 6-14 digits
 	private String bank = "";
-	private String bankCode = ""; // 6 digits, better String
-	private String codeEDRPOU = ""; // 8 digits, better String
-	private String inn = ""; // 12 digits, better String
+	private String bankCode = ""; // 6 digits
+	private String codeEDRPOU = ""; // 8 digits
+	private String inn = ""; // 12 digits
 
-	public Shop() {}
+	public ShopSupplier() {}
 
-	public Shop(int id, String businessName, String address,
+	public ShopSupplier(int id, boolean checkMark, String businessName, String address,
 				String phoneNumber, String fax, String accountCurrent,
 				String bank, String bankCode, String codeEDRPOU, String inn) {
-		this.id = id;
+		setId(id);
+		this.checkMark = checkMark;
 		this.businessName = businessName;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
@@ -52,7 +55,7 @@ public class Shop {
 	}
 
 	public String toString() {
-		return "\nShop id: " + getId + "\n"+ getBusinessName() + "\n"
+		return "\nShop id: " + getId() + "\n"+ getBusinessName() + "\n"
 			   + getAddress() + "\na/c " + getAccountCurrent()
 			   + "   MFO " + getBankCode() + "\nin a bank branch "
 			   + getBank() + "\nINN " + getInn() + "\ntel.: "
@@ -60,11 +63,21 @@ public class Shop {
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		if (id > 0) {
+			this.id = id;
+		}
 	}
 
 	public int getId() {
 		return id;
+	}
+
+	public void setCheckMark(boolean checkMark) {
+		this.checkMark = checkMark;
+	}
+
+	public boolean getCheckMark() {
+		return checkMark;
 	}
 
 	public void setBusinessName(String businessName) {
