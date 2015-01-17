@@ -149,9 +149,9 @@ public class Product {
 	}
 
 	/*
-	*Обновляет количество данного товара на складе, 
-	*в зависимости от его количества в
-	*приходной накладной или при продаже.
+	*Updates the number of products in stock 
+	*depending on the amount in
+	*supply or sale document.
 	*/
 
 	public void updateStockLevel(int productSupply,
