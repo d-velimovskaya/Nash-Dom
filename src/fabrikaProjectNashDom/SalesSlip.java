@@ -5,11 +5,11 @@ import java.util.Calendar;
 import java.util.List;
 
 public class SalesSlip {
-	private int slipNumber; // 8 digits - номер чека
-	private ShopSupplier shop = new ShopSupplier(); // магазин
+	private int slipNumber; // 8 digits - Г­Г®Г¬ГҐГ° Г·ГҐГЄГ 
+	private ShopSupplier shop = new ShopSupplier(); // Г¬Г ГЈГ Г§ГЁГ­
 	private Calendar date = new GregorianCalendar();
-	private List<Sale> sales = new ArrayList<Sale>(); //список продаж данного чека
-	private double total = 0.00; // общая сумма чека
+	private List<Sale> sales = new ArrayList<Sale>(); //Г±ГЇГЁГ±Г®ГЄ ГЇГ°Г®Г¤Г Г¦ Г¤Г Г­Г­Г®ГЈГ® Г·ГҐГЄГ 
+	private double total = 0.00; // Г®ГЎГ№Г Гї Г±ГіГ¬Г¬Г  Г·ГҐГЄГ 
 
 	public SalesSlip() {}
 	
@@ -73,7 +73,7 @@ public class SalesSlip {
 		for(Sale singleSale : sales) {
 			singleSale.getProduct().updateStockLevel(Sale.getProductsupply(),
 					singleSale.getProductSale());
-			singleSale.setSalesSlipNumber(getSlipNumber());
+			singleSale.setSalesSlipNumber(getSlipNumber());// I suppose it's not necessary
 		}
 		
 	}
