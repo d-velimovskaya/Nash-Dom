@@ -5,7 +5,7 @@ public class Sale {
 	private Product product;
 	private int productSale = 0;
 	private final static int productSupply = 0;
-	private int salesSlipNumber;
+	private int salesSlipNumber;// I suppose it's not necessary
 	private double totalAmount = 0.00;
 	
 	public Sale() {}
