@@ -5,11 +5,11 @@ import java.util.Calendar;
 import java.util.List;
 
 public class SalesSlip {
-	private int slipNumber; // 8 digits - íîìåð ÷åêà
-	private ShopSupplier shop = new ShopSupplier(); // ìàãàçèí
+	private int slipNumber; // 8 digits
+	private ShopSupplier shop = new ShopSupplier();
 	private Calendar date = new GregorianCalendar();
-	private List<Sale> sales = new ArrayList<Sale>(); //ñïèñîê ïðîäàæ äàííîãî ÷åêà
-	private double total = 0.00; // îáùàÿ ñóììà ÷åêà
+	private List<Sale> sales = new ArrayList<Sale>(); //list of sales for this cheque
+	private double total = 0.00; // total amount of thi cheque
 
 	public SalesSlip() {}
 	
@@ -73,7 +73,6 @@ public class SalesSlip {
 		for(Sale singleSale : sales) {
 			singleSale.getProduct().updateStockLevel(Sale.getProductsupply(),
 					singleSale.getProductSale());
-			singleSale.setSalesSlipNumber(getSlipNumber());// I suppose it's not necessary
 		}
 		
 	}

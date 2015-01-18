@@ -5,17 +5,14 @@ public class Sale {
 	private Product product;
 	private int productSale = 0;
 	private final static int productSupply = 0;
-	private int salesSlipNumber;// I suppose it's not necessary
 	private double totalAmount = 0.00;
 	
 	public Sale() {}
 	
-	public Sale(int saleId, Product product, int productSale,
-			int salesSlipNumber) {
+	public Sale(int saleId, Product product, int productSale) {
 		setSaleId(saleId);
 		this.product = product;
 		setProductSale(productSale);
-		setSalesSlipNumber(salesSlipNumber);
 		setTotalAmount(product, productSale);
 	}
 	
@@ -46,12 +43,6 @@ public class Sale {
 		if (productSale>0){
 			this.productSale = productSale;
 		}
-	}
-	public int getSalesSlipNumber() {
-		return salesSlipNumber;
-	}
-	public void setSalesSlipNumber(int salesSlipNumber) {
-		this.salesSlipNumber = salesSlipNumber;
 	}
 	public double getTotalAmount() {
 		return totalAmount;
