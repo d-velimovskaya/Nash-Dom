@@ -9,7 +9,7 @@ public class SalesSlip {
 	private ShopSupplier shop = new ShopSupplier();
 	private Calendar date = new GregorianCalendar();
 	private List<Sale> sales = new ArrayList<Sale>(); //list of sales for this cheque
-	private double total = 0.00; // total amount of thi cheque
+	private double total = 0.00; // total amount of this cheque
 
 	public SalesSlip() {}
 	
