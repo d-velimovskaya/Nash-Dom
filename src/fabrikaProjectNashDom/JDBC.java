@@ -33,7 +33,7 @@ public class JDBC {
 		return connection;
 	}
 	
-	//this method inserts a record to DB table
+	//this method inserts a record to DB table shop or supplier
 	public static void insertIntoShopSupplier(ShopSupplier ss){
 		connection = getDBconnection();
 		String insertTableSQL = "";
@@ -73,6 +73,8 @@ public class JDBC {
 		}
 	}
 	
+	//this method deletes a record  with chosen id
+	//from DB table shop or supplier
 	public static void deleteFromShopSupplier(ShopSupplier ss) {
 		connection = getDBconnection();
 		String deleteTableSQL = "";
@@ -107,6 +109,8 @@ public class JDBC {
 		}
 	}
 	
+	//this method selects all records from DB table shop or supplier
+	//depends on checkMark, if it true - shop, false - supplier
 	public static ArrayList<ShopSupplier> selectFromShopSupplier(boolean checkMark) {
 		ArrayList<ShopSupplier> report = new ArrayList<ShopSupplier>();
 		String selectTableSQL = "";
@@ -176,4 +180,71 @@ public class JDBC {
 		}
 		return report;
 	}
+	//this method inserts a record to DB table product
+	public static void newProduct(Product product){
+		connection = getDBconnection();
+		String insertTableSQL = "";
+		try {
+			statement = connection.createStatement();
+			insertTableSQL = "INSERT INTO product VALUES (\'"
+					+ product.getId() + "\',\'" + product.getBarcode() + "\',\'"
+					+ product.getArticle() + "\',\'"
+					+ product.getProductGroup() + "\',\'"
+					+ product.getProductName() + "\',\'"
+					+ product.getUnitOfMeasure() + "\',\'"
+					+ product.getPrimeCost() + "\',\'"
+					+ product.getConsumerPrice() + "\',\'"
+					+ product.getStockLevel() + "\',\'"
+					+ product.getDescription() + "\');";
+			statement.executeUpdate(insertTableSQL);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	//this method deletes a record  with chosen id
+	//from DB table product
+	public static void deleteProduct(Product product) {
+		connection = getDBconnection();
+		String deleteTableSQL = "";
+		try {
+			statement = connection.createStatement();
+			deleteTableSQL = "DELETE FROM product WHERE product_id = "
+					+ "\'" + product.getId() + "\';";
+			statement.executeUpdate(deleteTableSQL);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }
