@@ -247,4 +247,59 @@ public class JDBC {
 		}
 	}
 	
+	//this method selects all records from DB table product
+	public static ArrayList<Product> selectAllNotNullProducts() {
+		ArrayList<Product> productStock = new ArrayList<Product>();
+		String selectTableSQL = "";
+		connection = getDBconnection();
+		try {
+			statement = connection.createStatement();
+			selectTableSQL = "SELECT * FROM product WHERE stock_level <> 0 "
+					+ "ORDER BY product_id;";
+			ResultSet rs = statement.executeQuery(selectTableSQL);
+				if(rs != null) {
+					while (rs.next()) {
+						Product product = new Product();
+						product.setId(rs.getInt("product_id"));
+						product.setBarcode(rs.getString("barcode"));
+						product.setArticle(rs.getString("article"));
+						product.setProductGroup(rs.getString("product_group"));
+						product.setProductName(rs.getString("product_name"));
+						product.setUnitOfMeasure(rs.getString("unit_of_measure"));
+						product.setPrimeCost(rs.getDouble("prime_cost"));
+						product.setConsumerPrice(rs.getDouble("consumer_price"));
+						product.setStockLevel(rs.getInt("stock_level"));
+						product.setDescription(rs.getString("description"));
+						productStock.add(product);
+					}
+					if(rs != null) {
+						try {
+							rs.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					return productStock;
+					}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return productStock;
+	}
+
 }
