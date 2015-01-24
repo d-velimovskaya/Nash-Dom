@@ -1,38 +1,59 @@
 package fabrikaProjectNashDom;
 
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
 
+import javax.swing.JButton;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class UINashDom {
-	
+	static JDesktopPane jdpDesktop;
+	static int openFrameCount = 0;
+	static final int xPosition = 20, yPosition = 20;
+
 	public static void createUINashDom() {
 		JFrame frame = new JFrame("NashDom");
-		frame.setSize(900, 600);
+		frame.setSize(800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
-		frame.setLayout(new GridBagLayout());
+		frame.setLayout(new FlowLayout());
+
+		jdpDesktop = new JDesktopPane();
+		frame.setContentPane(jdpDesktop);
+		frame.setJMenuBar(createMenuBar());
 		
+		frame.setVisible(true);
+	}
+	
+	public static JMenuBar createMenuBar() {
 		JMenuBar menubar = new JMenuBar();
 		
-		JMenu productsMenu = new JMenu("Товары");
-		JMenu supplyMenu = new JMenu("Приходы");
-		JMenu buttonSlip = new JMenu("Новый чек");
-		JMenu reportsMenu = new JMenu("Отчёты");
+		JMenu productsMenu = new JMenu("РўРѕРІР°СЂС‹");
+		JMenu supplyMenu = new JMenu("РџСЂРёС…РѕРґС‹");
+		JMenu buttonSlip = new JMenu("РќРѕРІС‹Р№ С‡РµРє");
+		JMenu reportsMenu = new JMenu("РћС‚С‡С‘С‚С‹");
 		
-		JMenuItem addProductItemMenu = new JMenuItem("Добавить товар");
-		JMenuItem stockItemMenu = new JMenuItem("Остатки товара");
-		JMenuItem addSupplyItemMenu = new JMenuItem("Добавить приход");
-		JMenuItem addSupplierItemMenu = new JMenuItem("Добавить поставщика");
-		JMenuItem reportProductsItemMenu = new JMenuItem("Отчёт по товарам");
-		JMenuItem reportSuppliesItemMenu = new JMenuItem("Отчёт по приходам");
-		JMenuItem reportSalesItemMenu = new JMenuItem("Отчёт по продажам");
-		JMenuItem reportSuppliersItemMenu = new JMenuItem("Отчёт по поставщикам");
+		JMenuItem addProductItemMenu = new JMenuItem("Р”РѕР±Р°РІРёС‚СЊ С‚РѕРІР°СЂ");
+		JMenuItem stockItemMenu = new JMenuItem("РћСЃС‚Р°С‚РєРё С‚РѕРІР°СЂР°");
+		JMenuItem addSupplyItemMenu = new JMenuItem("Р”РѕР±Р°РІРёС‚СЊ РїСЂРёС…РѕРґ");
+		JMenuItem addSupplierItemMenu = new JMenuItem("Р”РѕР±Р°РІРёС‚СЊ РїРѕСЃС‚Р°РІС‰РёРєР°");
+		JMenuItem reportProductsItemMenu = new JMenuItem("РћС‚С‡С‘С‚ РїРѕ С‚РѕРІР°СЂР°Рј");
+		JMenuItem reportSuppliesItemMenu = new JMenuItem("РћС‚С‡С‘С‚ РїРѕ РїСЂРёС…РѕРґР°Рј");
+		JMenuItem reportSalesItemMenu = new JMenuItem("РћС‚С‡С‘С‚ РїРѕ РїСЂРѕРґР°Р¶Р°Рј");
+		JMenuItem reportSuppliersItemMenu = new JMenuItem("РћС‚С‡С‘С‚ РїРѕ РїРѕСЃС‚Р°РІС‰РёРєР°Рј");
 
 		productsMenu.add(addProductItemMenu);
 		productsMenu.add(stockItemMenu);
@@ -50,52 +71,165 @@ public class UINashDom {
 		
 		addProductItemMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				
+				createUINewProduct();
 			}
 		});
 		
 		stockItemMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				System.out.println(JDBC.selectAllNotNullProducts());
+				//action
 			}
 		});
 		
 		addSupplyItemMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				
+				//action
 			}
 		});
 		
 		addSupplierItemMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				
+				//action
 			}
 		});
 		
 		reportProductsItemMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				
+				//action
 			}
 		});
 		reportSuppliesItemMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				
+				//action
 			}
 		});
 		
 		reportSalesItemMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				
+				//action
 			}
 		});
 		
 		reportSuppliersItemMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				
+				//action
 			}
 		});
+		return menubar;
+	}
+	
+	public static void createUINewProduct() {
+		final JInternalFrame jfNewProduct = new JInternalFrame(
+				"РќРѕРІС‹Р№ С‚РѕРІР°СЂ", true, true, true, true);
+		jfNewProduct.setSize(700,400);
+		jfNewProduct.setLocation(xPosition * (++openFrameCount),
+				yPosition * openFrameCount);
+		jfNewProduct.setLayout(new GridBagLayout());
 		
-		frame.setJMenuBar(menubar);
-		frame.setVisible(true);
+		JButton saveButton = new JButton("РЎРѕС…СЂР°РЅРёС‚СЊ");
+		JButton exitButton = new JButton("РћС‚РјРµРЅР°");
+		
+		JLabel productIdLabel = new JLabel("Id С‚РѕРІР°СЂР°: ");
+		JLabel productBarcodeLabel = new JLabel("РЁС‚СЂРёС…РєРѕРґ: ");
+		JLabel productArticleLabel = new JLabel("РђСЂС‚РёРєСѓР»: ");
+		JLabel productGroupLabel = new JLabel("Р“СЂСѓРїРїР° С‚РѕРІР°СЂРѕРІ: ");
+		JLabel productNameLabel = new JLabel("РќР°РёРјРµРЅРѕРІР°РЅРёРµ С‚РѕРІР°СЂР°: ");
+		JLabel productUnitOfMeasureLabel = new JLabel("Р•РґРёРЅРёС†Р° РёР·РјРµСЂРµРЅРёСЏ: ");
+		JLabel productPrimeCostLabel = new JLabel("Р¦РµРЅР° Р·Р°РєСѓРїРєРё: ");
+		JLabel productConsumerPriceLabel = new JLabel("Р¦РµРЅР° РїСЂРѕРґР°Р¶Рё: ");
+		JLabel productDescriptionLabel = new JLabel("РћРїРёСЃР°РЅРёРµ: ");
+		
+		JTextField productIdTextField = new JTextField(15);
+		JTextField productBarcodeTextField = new JTextField(15);
+		JTextField productArticleTextField = new JTextField(15);
+		JTextField productGroupTextField = new JTextField(15);
+		JTextField productNameTextField = new JTextField(15);
+		JTextField productUnitOfMeasureTextField = new JTextField("С€С‚.", 15);
+		JTextField productPrimeCostTextField = new JTextField(15);
+		JTextField productConsumerPriceTextField = new JTextField(15);
+		JTextArea productDescriptionTextArea = new JTextArea(3, 30);
+		
+		productDescriptionTextArea.setLineWrap(true);
+		
+		jfNewProduct.add(productIdLabel, new GridBagConstraints(
+				0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new Insets(10,10,2,2), 0, 0));
+		jfNewProduct.add(productBarcodeLabel, new GridBagConstraints(
+				0, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2,10,2,2), 0, 0));
+		jfNewProduct.add(productArticleLabel, new GridBagConstraints(
+				0, 2, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2,10,2,2), 0, 0));
+		jfNewProduct.add(productGroupLabel, new GridBagConstraints(
+				0, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2,10,2,2), 0, 0));
+		jfNewProduct.add(productNameLabel, new GridBagConstraints(
+				0, 4, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2,10,2,2), 0, 0));
+		jfNewProduct.add(productUnitOfMeasureLabel, new GridBagConstraints(
+				0, 5, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2,10,2,2), 0, 0));
+		jfNewProduct.add(productPrimeCostLabel, new GridBagConstraints(
+				0, 6, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2,10,2,2), 0, 0));
+		jfNewProduct.add(productConsumerPriceLabel, new GridBagConstraints(
+				0, 7, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2,10,2,2), 0, 0));
+		jfNewProduct.add(productDescriptionLabel, new GridBagConstraints(
+				0, 8, 1, 1, 0.0, 0.0, GridBagConstraints.NORTHWEST,
+				GridBagConstraints.HORIZONTAL, new Insets(2,10,2,2), 0, 0));
+		jfNewProduct.add(productIdTextField, new GridBagConstraints(
+				1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH,
+				GridBagConstraints.HORIZONTAL, new Insets(10,2,2,2), 0, 0));
+		jfNewProduct.add(productBarcodeTextField, new GridBagConstraints(
+				1, 1, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
+		jfNewProduct.add(productArticleTextField, new GridBagConstraints(
+				1, 2, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
+		jfNewProduct.add(productGroupTextField, new GridBagConstraints(
+				1, 3, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
+		jfNewProduct.add(productNameTextField, new GridBagConstraints(
+				1, 4, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
+		jfNewProduct.add(productUnitOfMeasureTextField, new GridBagConstraints(
+				1, 5, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
+		jfNewProduct.add(productPrimeCostTextField, new GridBagConstraints(
+				1, 6, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
+		jfNewProduct.add(productConsumerPriceTextField, new GridBagConstraints(
+				1, 7, 1, 1, 0.0, 0.0, GridBagConstraints.NORTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
+		jfNewProduct.add(productDescriptionTextArea, new GridBagConstraints(
+				1, 8, 2, 3, 0.0, 0.0, GridBagConstraints.NORTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
+		jfNewProduct.add(saveButton, new GridBagConstraints(
+				2, 11, 1, 1, 0.0, 0.0, GridBagConstraints.SOUTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,10), 0, 0));
+		jfNewProduct.add(exitButton, new GridBagConstraints(
+				2, 12, 1, 1, 0.0, 0.0, GridBagConstraints.SOUTH,
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,10,10), 0, 0));
+
+		exitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				try {
+					jfNewProduct.setClosed(true);
+				} catch (PropertyVetoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+
+		jfNewProduct.setVisible(true);
+		jdpDesktop.add(jfNewProduct);
+		try {
+			jfNewProduct.setSelected(true);
+		} catch (PropertyVetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
