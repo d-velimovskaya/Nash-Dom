@@ -1,5 +1,6 @@
 package fabrikaProjectNashDom;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,6 +19,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.PlainDocument;
 
 public class UINashDom {
 	static JDesktopPane jdpDesktop;
@@ -120,9 +125,11 @@ public class UINashDom {
 	
 	public static void createUINewProduct() {
 		final JInternalFrame jfNewProduct = new JInternalFrame(
-				"Новый товар", true, true, true, true);
-		jfNewProduct.setSize(700,400);
-		jfNewProduct.setLocation(xPosition * (++openFrameCount),
+				"Новый товар " + (++openFrameCount), true, true, true, true);
+		jfNewProduct.setSize(550,450);
+//		jfNewProduct.setResizable(false);
+//		jfNewProduct.setMinimumSize(new Dimension(530,450));
+		jfNewProduct.setLocation(xPosition * (openFrameCount),
 				yPosition * openFrameCount);
 		jfNewProduct.setLayout(new GridBagLayout());
 		
@@ -139,7 +146,7 @@ public class UINashDom {
 		JLabel productConsumerPriceLabel = new JLabel("Цена продажи: ");
 		JLabel productDescriptionLabel = new JLabel("Описание: ");
 		
-		JTextField productIdTextField = new JTextField(15);
+		JTextField productIdTextField = new JTextField(25);
 		JTextField productBarcodeTextField = new JTextField(15);
 		JTextField productArticleTextField = new JTextField(15);
 		JTextField productGroupTextField = new JTextField(15);
@@ -147,8 +154,15 @@ public class UINashDom {
 		JTextField productUnitOfMeasureTextField = new JTextField("шт.", 15);
 		JTextField productPrimeCostTextField = new JTextField(15);
 		JTextField productConsumerPriceTextField = new JTextField(15);
-		JTextArea productDescriptionTextArea = new JTextArea(3, 30);
+		JTextArea productDescriptionTextArea = new JTextArea(8, 30);
 		
+		setTextLimit(productIdTextField, 10);
+		setTextLimit(productBarcodeTextField, 14);
+		setTextLimit(productArticleTextField, 20);
+		setTextLimit(productGroupTextField, 30);
+		setTextLimit(productNameTextField, 255);
+		setTextLimit(productUnitOfMeasureTextField, 5);
+		setTextLimit(productDescriptionTextArea, 500);
 		productDescriptionTextArea.setLineWrap(true);
 		
 		jfNewProduct.add(productIdLabel, new GridBagConstraints(
@@ -204,7 +218,7 @@ public class UINashDom {
 				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
 		jfNewProduct.add(productDescriptionTextArea, new GridBagConstraints(
 				1, 8, 2, 3, 0.0, 0.0, GridBagConstraints.NORTH,
-				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,2), 0, 0));
+				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,10), 0, 0));
 		jfNewProduct.add(saveButton, new GridBagConstraints(
 				2, 11, 1, 1, 0.0, 0.0, GridBagConstraints.SOUTH,
 				GridBagConstraints.HORIZONTAL, new Insets(2,2,2,10), 0, 0));
@@ -232,4 +246,17 @@ public class UINashDom {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void setTextLimit(JTextComponent text, final int k) {
+		text.setDocument(new PlainDocument() {
+			@Override
+			public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+				if (str != null && (getLength() + str.length()) <= k) {
+					super.insertString(offset, str, attr);
+				}
+			}
+		});
+	}
+	
+
 }

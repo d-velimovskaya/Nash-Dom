@@ -51,7 +51,11 @@ public class TestMain {
 //	JDBC.newProduct(product3);
 //	JDBC.deleteProduct(product2);
 //	System.out.println(JDBC.selectAllNotNullProducts());
-	UINashDom.createUINashDom();
+	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		public void run() {
+			UINashDom.createUINashDom();
+		}
+	});
 	}
 
 }
