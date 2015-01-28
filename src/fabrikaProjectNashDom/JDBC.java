@@ -302,4 +302,132 @@ public class JDBC {
 		return productStock;
 	}
 
+	//this method get maximum product_id from DB table "product"
+	public static int getMaxProductId() {
+		String selectTableSQL = "SELECT max(product_id) FROM product;";
+		int maxProductId = 0;
+		connection = getDBconnection();
+		try {
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(selectTableSQL);
+				if(rs != null) {
+					while (rs.next()) {
+						maxProductId = rs.getInt("max");
+					}
+					if(rs != null) {
+						try {
+							rs.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					return maxProductId;
+					}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return maxProductId;
+	}
+	
+	//This method checks whether there is a product with id in our database
+	public static boolean idUnicityTest(String tableName, int newId) {
+		String selectTableSQL = "SELECT * FROM " + tableName + ";";
+		connection = getDBconnection();
+		try {
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(selectTableSQL);
+				if(rs != null) {
+					while (rs.next()) {
+						if (rs.getInt(tableName + "_id") == newId) {
+							return true;
+						}
+					}
+					if(rs != null) {
+						try {
+							rs.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return false;
+	}
+
+	//This method checks whether there is a new value in specified
+	//column of the specified table in our database.
+	public static boolean ValueUnicityTest(String tableName,
+			String column, String newValue) {
+		String selectTableSQL = "SELECT * FROM " + tableName + ";";
+		connection = getDBconnection();
+		try {
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(selectTableSQL);
+				if(rs != null) {
+					while (rs.next()) {
+						if (rs.getString(column).equals(newValue)) {
+							return true;
+						}
+					}
+					if(rs != null) {
+						try {
+							rs.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return false;
+	}
+
 }

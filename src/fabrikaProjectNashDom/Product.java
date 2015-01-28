@@ -56,7 +56,7 @@ public class Product {
 
 	public String toString() {
 		return "\nProduct Id: " + getId() + "\nBarcode: " 
-		+ getBarcode() + "Article: " + getArticle()
+		+ getBarcode() + "\nArticle: " + getArticle()
 		+ "\nProduct Group: " + getProductGroup()
 		+ "\nProduct Name: " + getProductName()
 		+ "\nProduct Quantity: " + getStockLevel()
