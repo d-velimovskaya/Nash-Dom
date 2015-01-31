@@ -303,16 +303,17 @@ public class JDBC {
 	}
 
 	//this method get maximum product_id from DB table "product"
-	public static int getMaxProductId() {
-		String selectTableSQL = "SELECT max(product_id) FROM product;";
-		int maxProductId = 0;
+	public static int getMaxId(String tableName) {
+		String selectTableSQL = "SELECT max(" +
+					tableName +"_id) FROM " + tableName + ";";
+		int maxId = 0;
 		connection = getDBconnection();
 		try {
 			statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(selectTableSQL);
 				if(rs != null) {
 					while (rs.next()) {
-						maxProductId = rs.getInt("max");
+						maxId = rs.getInt("max");
 					}
 					if(rs != null) {
 						try {
@@ -321,7 +322,7 @@ public class JDBC {
 							e.printStackTrace();
 						}
 					}
-					return maxProductId;
+					return maxId;
 					}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -341,7 +342,7 @@ public class JDBC {
 				}
 			}
 		}
-		return maxProductId;
+		return maxId;
 	}
 	
 	//This method checks whether there is a product with id in our database
@@ -430,4 +431,86 @@ public class JDBC {
 		return false;
 	}
 
+	public static int countDistinctProductGroups(){
+		String selectCountProductGroupSQL = "SELECT COUNT("
+				+ "DISTINCT product_group) FROM product;";
+		int productGroupCount = 0;
+		connection = getDBconnection();
+		try {
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(selectCountProductGroupSQL);
+				if(rs != null) {
+					while (rs.next()) {
+						productGroupCount = rs.getInt("count");
+					}
+					if(rs != null) {
+						try {
+							rs.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return productGroupCount;
+	}
+	public static String[] getAllDistinctProductGroups(){
+		String selectAllDistinctProductGroupSQL = 
+				"SELECT DISTINCT product_group FROM product;";
+		int k = countDistinctProductGroups();
+		String[] productGroups = new String[k];
+		int i=0;
+		connection = getDBconnection();
+		try {
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(selectAllDistinctProductGroupSQL);
+				if(rs != null) {
+					while (rs.next()) {
+						productGroups[i++] = rs.getString("product_group");
+					}
+					if(rs != null) {
+						try {
+							rs.close();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return productGroups;
+	}
 }
