@@ -46,9 +46,9 @@ public class TestMain {
 //			   		+ " выбор объема порции, подогрев чашек, регулировка"
 //			   		+ " крепости кофе. Габариты: 35,1x23,8x43 см. Вес: 9 кг."
 //			   		+ " Цвет: серебристый.");
-//	JDBC.newProduct(product1);
-//	JDBC.newProduct(product2);
-//	JDBC.newProduct(product3);
+//	JDBC.setNewProduct(product1);
+//	JDBC.setNewProduct(product2);
+//	JDBC.setNewProduct(product3);
 //	JDBC.deleteProduct(product2);
 //	System.out.println(JDBC.selectAllNotNullProducts());
 	javax.swing.SwingUtilities.invokeLater(new Runnable() {

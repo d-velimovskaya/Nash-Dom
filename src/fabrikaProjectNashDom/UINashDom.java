@@ -38,7 +38,7 @@ public class UINashDom {
 	private static final int codeINNdigitsCount = 12;
 	private static final int barcodeDigitsCount = 13;
 	private static final int productArticleSymbolCount = 20;
-	private static final int productGroupSymbolCount = 12;
+	private static final int productGroupSymbolCount = 30;
 	private static final int NameSymbolCount = 255;
 	private static final int productUnitOfMeasureSymbolCount = 5;
 	private static final int productDescriptionSymbolCount = 500;
@@ -76,6 +76,7 @@ public class UINashDom {
 		JMenuItem addSupplyItemMenu = new JMenuItem("Добавить приход");
 		JMenuItem addSupplierItemMenu = new JMenuItem("Добавить поставщика");
 		JMenuItem newSlipItemMenu = new JMenuItem("Новый чек");
+		JMenuItem ShopItemMenu = new JMenuItem("Магазин");
 		JMenuItem reportProductsItemMenu = new JMenuItem("Отчёт по товарам");
 		JMenuItem reportSuppliesItemMenu = new JMenuItem("Отчёт по приходам");
 		JMenuItem reportSalesItemMenu = new JMenuItem("Отчёт по продажам");
@@ -86,6 +87,7 @@ public class UINashDom {
 		supplyMenu.add(addSupplyItemMenu);
 		supplyMenu.add(addSupplierItemMenu);
 		salesMenu.add(newSlipItemMenu);
+		salesMenu.add(ShopItemMenu);
 		reportsMenu.add(reportProductsItemMenu);
 		reportsMenu.add(reportSuppliesItemMenu);
 		reportsMenu.add(reportSalesItemMenu);
@@ -121,6 +123,12 @@ public class UINashDom {
 		});
 
 		newSlipItemMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				//action
+			}
+		});
+
+		ShopItemMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				//action
 			}
@@ -194,6 +202,10 @@ public class UINashDom {
 		checkAndLimitTextOnDigits(productBarcodeTextField,
 				barcodeDigitsCount);
 		setTextLimit(productArticleTextField, productArticleSymbolCount);
+		JTextComponent comboBoxEditor = 
+				(JTextComponent) productGroupComboBox.getEditor().
+					getEditorComponent();
+		setTextLimit(comboBoxEditor, productGroupSymbolCount);
 		productGroupComboBox.setEditable(true);
 		setTextLimit(productNameTextField, NameSymbolCount);
 		setTextLimit(productUnitOfMeasureTextField,
@@ -268,21 +280,127 @@ public class UINashDom {
 
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				JTextComponent[] textComponents = {productNameTextField,
-						productIdTextField,	productBarcodeTextField,
-						productArticleTextField, productUnitOfMeasureTextField,
-						productPrimeCostTextField, productConsumerPriceTextField,
-						productDescriptionTextArea};
-				String[] textMessage = {"наименование товара",
-						"код товара", "штрих код", "артикул",
-						"группу товаров", "единицу измерения",
-						"цену закупки", "цену продажи"};
-//				System.out.println(productGroupComboBox.getSelectedItem());
-				if(checkEmptyJTextComponents(jfNewProduct, textComponents,
-						textMessage)) {
-//					Product newProduct = getInfo(textComponents);
-//					JDBC.newProduct(newProduct);
+				if (productNameTextField.getText().trim().isEmpty()) {
+					JOptionPane.showMessageDialog(jfNewProduct,
+							"Пожалуйста, укажите наименование товара!");
+					return;
 				}
+				if (productPrimeCostTextField.getText().trim().isEmpty()) {
+					JOptionPane.showMessageDialog(jfNewProduct,
+							"Пожалуйста, укажите цену закупки!");
+					return;
+				}
+				if (productConsumerPriceTextField.getText().trim().isEmpty()) {
+					JOptionPane.showMessageDialog(jfNewProduct,
+							"Пожалуйста, укажите цену продажи!");
+					return;
+				}
+				if (Double.parseDouble(productConsumerPriceTextField.getText().trim()) <
+						Double.parseDouble(productPrimeCostTextField.getText().trim())) {
+					JOptionPane.showMessageDialog(jfNewProduct,
+							"Цена продажи меньше цены закупки!"
+							+ "\nПожалуйста, проверьте указанные цены!",
+							"Сообщение", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(!productBarcodeTextField.getText().trim().isEmpty()) {
+					if(JDBC.ValueUnicityTest("product", "barcode",
+							productBarcodeTextField.getText().trim())) {
+						JOptionPane.showMessageDialog(jfNewProduct,
+								"Пожалуйста, проверьте указанный штрих код!"
+								+ "\nТовар с таким штрих кодом уже существует!",
+								"Сообщение", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				}
+				if (productIdTextField.getText().trim().isEmpty()) {
+					JOptionPane.showMessageDialog(jfNewProduct,
+							"Пожалуйста, укажите код товара!");
+					return;
+				} else {
+					if(JDBC.ValueUnicityTest("product", "product_id",
+						productIdTextField.getText().trim())) {
+						Object[] idOptions = {"Обновить", "Отмена"};
+						int idReply = JOptionPane.showOptionDialog(jfNewProduct,
+							"Товар с таким кодом уже существует!"
+							+ "\nОбновите, пожалуйста, код товара",
+							"Сообщение", JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null,
+							idOptions, idOptions[0]);
+						System.out.println("idReply = " + idReply);
+						if(idReply == 0) {
+							productIdTextField.setText(
+									Integer.toString(
+											JDBC.getMaxId("product") + 1));
+						} else if(idReply == 1) {
+							return;
+						}
+					}
+				}
+				if(!productArticleTextField.getText().trim().isEmpty()) {
+					if(JDBC.ValueUnicityTest("product", "article",
+							productArticleTextField.getText().trim())) {
+						Object[] articleOptions = {"Сохранить", "Отмена"};
+						int articleReply = JOptionPane.showOptionDialog(jfNewProduct,
+								"Товар с таким артикулом уже существует!"
+								+ "\nПродолжить сохранение?", "Сообщение",
+								JOptionPane.OK_CANCEL_OPTION,
+								JOptionPane.QUESTION_MESSAGE,
+								null, articleOptions, articleOptions[1]);
+						System.out.println("articleReply = " + articleReply);
+							if(articleReply == 0) {
+									Product newProduct =
+											getProductInfo(productNameTextField,
+											productIdTextField, productBarcodeTextField,
+											productArticleTextField, productGroupComboBox,
+											productUnitOfMeasureTextField,
+											productPrimeCostTextField,
+											productConsumerPriceTextField,
+											productDescriptionTextArea);
+									System.out.println(newProduct);
+									try {
+										jfNewProduct.setClosed(true);
+									} catch (PropertyVetoException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+							} else if(articleReply == 1) {
+								return;
+							}
+					} else {
+						Product newProduct =
+								getProductInfo(productNameTextField,
+								productIdTextField, productBarcodeTextField,
+								productArticleTextField, productGroupComboBox,
+								productUnitOfMeasureTextField,
+								productPrimeCostTextField,
+								productConsumerPriceTextField,
+								productDescriptionTextArea);
+						System.out.println(newProduct);
+						try {
+							jfNewProduct.setClosed(true);
+						} catch (PropertyVetoException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				} else {
+								Product newProduct =
+										getProductInfo(productNameTextField,
+										productIdTextField, productBarcodeTextField,
+										productArticleTextField, productGroupComboBox,
+										productUnitOfMeasureTextField,
+										productPrimeCostTextField,
+										productConsumerPriceTextField,
+										productDescriptionTextArea);
+								System.out.println(newProduct);
+								try {
+									jfNewProduct.setClosed(true);
+								} catch (PropertyVetoException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+					}
 			}
 		});
 
@@ -544,35 +662,40 @@ public class UINashDom {
 		});
 	}
 
-	//check if the important text fields and areas are empty
-	//without extra info or description
-	public static boolean checkEmptyJTextComponents(
-			JInternalFrame internalFrame, JTextComponent[] textComponents,
-			String[] textMessage) {
-		for(int i=0; i < textComponents.length-1; i++) {
-			if (textComponents[i].getText().trim().isEmpty()) {
-				JOptionPane.showMessageDialog(internalFrame,
-						"Пожалуйста, укажите " + textMessage[i] + "!");
-				return false;
-			}
-		}
-		return true;
-	}
-
 	//gets text from text fields and set it into db product table
-	public static Product getInfo(JTextComponent[] textComponents){
-		int i=0;
+	public static Product getProductInfo(JTextField name,
+			JTextField id, JTextField barcode, JTextField article,
+			JComboBox<String> group, JTextField unitOfMeasure,
+			JTextField primeCost, JTextField consumerPrice,
+			JTextArea description){
 		Product newProduct = new Product();
-		newProduct.setId(Integer.parseInt(textComponents[i++].getText()));
-		newProduct.setBarcode(textComponents[i++].getText());
-		newProduct.setArticle(textComponents[i++].getText());
-		newProduct.setProductGroup(textComponents[i++].getText());
-		newProduct.setProductName(textComponents[i++].getText());
-		newProduct.setUnitOfMeasure(textComponents[i++].getText());
-		newProduct.setPrimeCost(Double.parseDouble(textComponents[i++].getText()));
-		newProduct.setConsumerPrice(Double.parseDouble(textComponents[i++].getText()));
-		newProduct.setDescription(textComponents[i++].getText());
-
+		if(!id.getText().trim().isEmpty()) {
+		newProduct.setId(Integer.parseInt(id.getText()));
+		}
+		if(!barcode.getText().trim().isEmpty()) {
+		newProduct.setBarcode(barcode.getText());
+		}
+		if(!article.getText().trim().isEmpty()) {
+		newProduct.setArticle(article.getText());
+		}
+		if(!((String)group.getSelectedItem()).trim().isEmpty()) {
+		newProduct.setProductGroup((String)group.getSelectedItem());
+		}
+		if(!name.getText().trim().isEmpty()) {
+		newProduct.setProductName(name.getText());
+		}
+		if(!unitOfMeasure.getText().trim().isEmpty()) {
+		newProduct.setUnitOfMeasure(unitOfMeasure.getText());
+		}
+		if(!primeCost.getText().trim().isEmpty()) {
+		newProduct.setPrimeCost(Double.parseDouble(primeCost.getText()));
+		}
+		if(!consumerPrice.getText().trim().isEmpty()) {
+		newProduct.setConsumerPrice(Double.parseDouble(consumerPrice.getText()));
+		}
+		if(!description.getText().trim().isEmpty()) {
+		newProduct.setDescription(description.getText());
+		}
 		return newProduct;
 	}
 	

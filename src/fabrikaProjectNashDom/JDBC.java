@@ -181,7 +181,7 @@ public class JDBC {
 		return report;
 	}
 	//this method inserts a record to DB table product
-	public static void newProduct(Product product){
+	public static void setNewProduct(Product product){
 		connection = getDBconnection();
 		String insertTableSQL = "";
 		try {
@@ -302,7 +302,7 @@ public class JDBC {
 		return productStock;
 	}
 
-	//this method get maximum product_id from DB table "product"
+	//this method get maximum tableName_id from DB table with tableName
 	public static int getMaxId(String tableName) {
 		String selectTableSQL = "SELECT max(" +
 					tableName +"_id) FROM " + tableName + ";";
@@ -345,50 +345,12 @@ public class JDBC {
 		return maxId;
 	}
 	
-	//This method checks whether there is a product with id in our database
-	public static boolean idUnicityTest(String tableName, int newId) {
-		String selectTableSQL = "SELECT * FROM " + tableName + ";";
-		connection = getDBconnection();
-		try {
-			statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery(selectTableSQL);
-				if(rs != null) {
-					while (rs.next()) {
-						if (rs.getInt(tableName + "_id") == newId) {
-							return true;
-						}
-					}
-					if(rs != null) {
-						try {
-							rs.close();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
-					}
-					}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			if(statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			if(connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return false;
-	}
-
-	//This method checks whether there is a new value in specified
-	//column of the specified table in our database.
+	/*This method checks whether there is a new value in specified
+	*column of the specified table in our database.
+	*If the specified table in specified column already has
+	*this value the method returns true, in other case 
+	*(new value is unique) it returns false.
+	*/
 	public static boolean ValueUnicityTest(String tableName,
 			String column, String newValue) {
 		String selectTableSQL = "SELECT * FROM " + tableName + ";";
@@ -431,6 +393,7 @@ public class JDBC {
 		return false;
 	}
 
+	//get the quantity of different product groups in DB table "product"
 	public static int countDistinctProductGroups(){
 		String selectCountProductGroupSQL = "SELECT COUNT("
 				+ "DISTINCT product_group) FROM product;";
@@ -471,6 +434,8 @@ public class JDBC {
 		}
 		return productGroupCount;
 	}
+	
+	//get only distinct product groups frop DB table "product"
 	public static String[] getAllDistinctProductGroups(){
 		String selectAllDistinctProductGroupSQL = 
 				"SELECT DISTINCT product_group FROM product;";

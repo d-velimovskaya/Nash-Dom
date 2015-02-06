@@ -1,9 +1,9 @@
 package fabrikaProjectNashDom;
 public class Product {
 	private int id = 0;
-	private String barcode = ""; // under 14 symbols
-	private String article = "";
-	private String productGroup = "";
+	private String barcode = ""; // under 13 symbols
+	private String article = ""; // under 20 symbols
+	private String productGroup = ""; // under 30 symbols
 	private String productName = "";
 	private String unitOfMeasure = "";
 	private double primeCost = 0.00;
@@ -59,10 +59,10 @@ public class Product {
 		+ getBarcode() + "\nArticle: " + getArticle()
 		+ "\nProduct Group: " + getProductGroup()
 		+ "\nProduct Name: " + getProductName()
-		+ "\nProduct Quantity: " + getStockLevel()
+		+ "\nProduct Quantity: " + getStockLevel() + " "
 		+ getUnitOfMeasure() + "\nProduct Final Cost = "
 		+ getPrimeCost() + "\nProduct Consumer Price = "
-		+ getConsumerPrice() + "\nProduct Description:"
+		+ getConsumerPrice() + "\nProduct Description:\n"
 		+ getDescription();
 	}
 	
