@@ -207,6 +207,7 @@ public class UINashDom {
 					getEditorComponent();
 		setTextLimit(comboBoxEditor, productGroupSymbolCount);
 		productGroupComboBox.setEditable(true);
+		productGroupComboBox.setSelectedItem("");
 		setTextLimit(productNameTextField, NameSymbolCount);
 		setTextLimit(productUnitOfMeasureTextField,
 				productUnitOfMeasureSymbolCount);
@@ -327,7 +328,6 @@ public class UINashDom {
 							"Сообщение", JOptionPane.OK_CANCEL_OPTION,
 							JOptionPane.QUESTION_MESSAGE, null,
 							idOptions, idOptions[0]);
-						System.out.println("idReply = " + idReply);
 						if(idReply == 0) {
 							productIdTextField.setText(
 									Integer.toString(
@@ -347,7 +347,6 @@ public class UINashDom {
 								JOptionPane.OK_CANCEL_OPTION,
 								JOptionPane.QUESTION_MESSAGE,
 								null, articleOptions, articleOptions[1]);
-						System.out.println("articleReply = " + articleReply);
 							if(articleReply == 0) {
 									Product newProduct =
 											getProductInfo(productNameTextField,
@@ -357,7 +356,7 @@ public class UINashDom {
 											productPrimeCostTextField,
 											productConsumerPriceTextField,
 											productDescriptionTextArea);
-									System.out.println(newProduct);
+									JDBC.setNewProduct(newProduct);
 									try {
 										jfNewProduct.setClosed(true);
 									} catch (PropertyVetoException e) {
@@ -376,7 +375,7 @@ public class UINashDom {
 								productPrimeCostTextField,
 								productConsumerPriceTextField,
 								productDescriptionTextArea);
-						System.out.println(newProduct);
+						JDBC.setNewProduct(newProduct);
 						try {
 							jfNewProduct.setClosed(true);
 						} catch (PropertyVetoException e) {
@@ -385,21 +384,21 @@ public class UINashDom {
 						}
 					}
 				} else {
-								Product newProduct =
-										getProductInfo(productNameTextField,
-										productIdTextField, productBarcodeTextField,
-										productArticleTextField, productGroupComboBox,
-										productUnitOfMeasureTextField,
-										productPrimeCostTextField,
-										productConsumerPriceTextField,
-										productDescriptionTextArea);
-								System.out.println(newProduct);
-								try {
-									jfNewProduct.setClosed(true);
-								} catch (PropertyVetoException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+					Product newProduct =
+							getProductInfo(productNameTextField,
+							productIdTextField, productBarcodeTextField,
+							productArticleTextField, productGroupComboBox,
+							productUnitOfMeasureTextField,
+							productPrimeCostTextField,
+							productConsumerPriceTextField,
+							productDescriptionTextArea);
+					JDBC.setNewProduct(newProduct);
+					try {
+						jfNewProduct.setClosed(true);
+					} catch (PropertyVetoException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					}
 			}
 		});
@@ -424,7 +423,7 @@ public class UINashDom {
 		}
 	}
 	
-	//creates an internal jframe to add info about new product
+	//creates an internal jframe to add info about new supplier
 	public static void createUINewSupplier() {
 		final JInternalFrame jfNewSupplier = new JInternalFrame(
 				"Новый поставщик", true, true, true, true);

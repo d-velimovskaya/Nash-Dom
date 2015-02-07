@@ -435,10 +435,11 @@ public class JDBC {
 		return productGroupCount;
 	}
 	
-	//get only distinct product groups frop DB table "product"
+	//get only distinct product groups frop DB table "product" 
+	//in ascending order
 	public static String[] getAllDistinctProductGroups(){
 		String selectAllDistinctProductGroupSQL = 
-				"SELECT DISTINCT product_group FROM product;";
+			"SELECT DISTINCT product_group FROM product ORDER BY product_group;";
 		int k = countDistinctProductGroups();
 		String[] productGroups = new String[k];
 		int i=0;
