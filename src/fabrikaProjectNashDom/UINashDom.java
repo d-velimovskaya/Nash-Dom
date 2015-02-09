@@ -30,7 +30,7 @@ public class UINashDom {
 	private static JDesktopPane jdpDesktop;
 	private static int openFrameCount = 0;
 	private static final int xPosition = 20, yPosition = 20;
-	private static final int codeDigitsCount = 10;
+	private static final int codeDigitsCount = 9;
 	private static final int priceDigitsCount = 12;
 	private static final int accountDigitsCount = 14;
 	private static final int bankCodeDigitsCount = 6;
@@ -554,25 +554,122 @@ public class UINashDom {
 				4, 14, 1, 1, 0.0, 0.0, GridBagConstraints.LAST_LINE_END,
 				GridBagConstraints.HORIZONTAL, new Insets(2,2,10,10), 0, 0));
 
-//		saveButton.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent event) {
-//				JTextComponent[] textComponents = {productNameTextField,
-//						supplierPhoneNumberLabel,	supplierAddressTextArea,
-//						supplierFaxLabel, supplierAccountCurrentLabel, 
-//						supplierBankLabel,supplierBankCodeLabel,
-//						supplierCodeEDRPOULabel, supplierExtraInfoLabel};
-//				String[] textMessage = {"наименование товара",
-//						"код товара", "штрих код", "артикул",
-//						"группу товаров", "единицу измерения",
-//						"цену закупки", "цену продажи"};
-//				if(checkEmptyJTextComponents(jfNewProduct, textComponents,
-//						textMessage)) {
-//					Product newProduct = getInfo(textComponents);
-//					System.out.println(JDBC.getMaxProductId());
-////					JDBC.newProduct(newProduct);
-//				}
-//			}
-//		});
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if(!supplierAccountCurrentTextField.getText().trim().isEmpty()) {
+					if(JDBC.ValueUnicityTest("supplier", "supplier_account_current",
+							supplierAccountCurrentTextField.getText().trim())) {
+						JOptionPane.showMessageDialog(jfNewSupplier,
+								"Пожалуйста, проверьте указанный расчётный счёт!"
+								+ "\nПредприятие с таким р/с уже существует!",
+								"Сообщение", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				}
+				if(!supplierCodeEDRPOUTextField.getText().trim().isEmpty()) {
+					if(JDBC.ValueUnicityTest("supplier", "supplier_edrpou_code",
+							supplierCodeEDRPOUTextField.getText().trim())) {
+						JOptionPane.showMessageDialog(jfNewSupplier,
+								"Пожалуйста, проверьте указанный код ЕГРПОУ!"
+								+ "\nПредприятие с таким кодом ЕГРПОУ уже существует!",
+								"Сообщение", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				}
+				if(!supplierINNTextField.getText().trim().isEmpty()) {
+					if(JDBC.ValueUnicityTest("supplier", "supplier_inn",
+							supplierINNTextField.getText().trim())) {
+						JOptionPane.showMessageDialog(jfNewSupplier,
+								"Пожалуйста, проверьте указанный код ИНН!"
+								+ "\nПредприятие с таким кодом ИНН уже существует!",
+								"Сообщение", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+				}
+				if (supplierIdTextField.getText().trim().isEmpty()) {
+					JOptionPane.showMessageDialog(jfNewSupplier,
+							"Пожалуйста, укажите код предприятия!");
+					return;
+				} else {
+					if(JDBC.ValueUnicityTest("supplier", "supplier_id",
+							supplierIdTextField.getText().trim())) {
+						Object[] idOptions = {"Обновить", "Отмена"};
+						int idReply = JOptionPane.showOptionDialog(jfNewSupplier,
+							"Поставщик с таким кодом уже существует!"
+							+ "\nОбновите, пожалуйста, код предприятия",
+							"Сообщение", JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null,
+							idOptions, idOptions[0]);
+						if(idReply == 0) {
+							supplierIdTextField.setText(
+									Integer.toString(
+											JDBC.getMaxId("product") + 1));
+						} else if(idReply == 1) {
+							return;
+						}
+					}
+				}
+				if (supplierNameTextField.getText().trim().isEmpty()) {
+					JOptionPane.showMessageDialog(jfNewSupplier,
+							"Пожалуйста, укажите наименование предприятия!");
+					return;
+				} else {
+					if(JDBC.ValueUnicityTest("supplier", "supplier_name",
+							supplierNameTextField.getText().trim())) {
+						Object[] supplierNameOptions = {"Сохранить", "Отмена"};
+						int supplierNameReply = JOptionPane.showOptionDialog(jfNewSupplier,
+								"Поставщик с таким наименованием уже существует!"
+								+ "\nПродолжить сохранение?", "Сообщение",
+								JOptionPane.OK_CANCEL_OPTION,
+								JOptionPane.QUESTION_MESSAGE,
+								null, supplierNameOptions, supplierNameOptions[1]);
+							if(supplierNameReply == 0) {
+								ShopSupplier newSupplier =
+										getSupplierInfo(supplierNameTextField,
+											supplierIdTextField,
+											supplierAddressTextField,
+											supplierPhoneNumberTextField,
+											supplierFaxTextField,
+											supplierAccountCurrentTextField,
+											supplierBankTextField,
+											supplierBankCodeTextField,
+											supplierCodeEDRPOUTextField,
+											supplierINNTextField,
+											supplierExtraInfoTextArea);
+								JDBC.insertIntoShopSupplier(newSupplier);
+								try {
+									jfNewSupplier.setClosed(true);
+								} catch (PropertyVetoException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+						} else if(supplierNameReply == 1) {
+								return;
+							}
+					} else {
+						ShopSupplier newSupplier =
+								getSupplierInfo(supplierNameTextField,
+									supplierIdTextField,
+									supplierAddressTextField,
+									supplierPhoneNumberTextField,
+									supplierFaxTextField,
+									supplierAccountCurrentTextField,
+									supplierBankTextField,
+									supplierBankCodeTextField,
+									supplierCodeEDRPOUTextField,
+									supplierINNTextField,
+									supplierExtraInfoTextArea);
+						JDBC.insertIntoShopSupplier(newSupplier);
+						try {
+							jfNewSupplier.setClosed(true);
+						} catch (PropertyVetoException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
 
 		exitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -697,5 +794,49 @@ public class UINashDom {
 		}
 		return newProduct;
 	}
-	
+
+	//gets text from text fields and set it into db supplier table
+	public static ShopSupplier getSupplierInfo(JTextField name,
+			JTextField id, JTextField address, JTextField phone,
+			JTextField fax, JTextField accountCurrent,
+			JTextField bank, JTextField bankCode,
+			JTextField codeEDRPOU, JTextField codeINN,
+			JTextArea extraInfo){
+		ShopSupplier newSupplier = new ShopSupplier();
+		if(!id.getText().trim().isEmpty()) {
+			newSupplier.setId(Integer.parseInt(id.getText()));
+		}
+		if(!name.getText().trim().isEmpty()) {
+			newSupplier.setBusinessName(name.getText());
+		}
+		if(!address.getText().trim().isEmpty()) {
+			newSupplier.setAddress(address.getText());
+		}
+		if(!phone.getText().trim().isEmpty()) {
+			newSupplier.setPhoneNumber(phone.getText());
+		}
+		if(!fax.getText().trim().isEmpty()) {
+			newSupplier.setFax(fax.getText());
+		}
+		if(!accountCurrent.getText().trim().isEmpty()) {
+			newSupplier.setAccountCurrent(accountCurrent.getText());
+		}
+		if(!bank.getText().trim().isEmpty()) {
+			newSupplier.setBank(bank.getText());
+		}
+		if(!bankCode.getText().trim().isEmpty()) {
+			newSupplier.setBankCode(bankCode.getText());
+		}
+		if(!codeEDRPOU.getText().trim().isEmpty()) {
+			newSupplier.setCodeEDRPOU(codeEDRPOU.getText());
+		}
+		if(!codeINN.getText().trim().isEmpty()) {
+			newSupplier.setInn(codeINN.getText());
+		}
+		if(!extraInfo.getText().trim().isEmpty()) {
+			newSupplier.setExtraInformation(extraInfo.getText());
+		}
+		return newSupplier;
+	}
+
 }

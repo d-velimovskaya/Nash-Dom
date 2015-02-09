@@ -11,12 +11,14 @@ public class ShopSupplier {
 	private String bankCode = ""; // 6 digits
 	private String codeEDRPOU = ""; // 8 digits
 	private String inn = ""; // 12 digits
+	private String extraInformation = "";
 
 	public ShopSupplier() {}
 
 	public ShopSupplier(int id, boolean checkMark, String businessName, String address,
 				String phoneNumber, String fax, String accountCurrent,
-				String bank, String bankCode, String codeEDRPOU, String inn) {
+				String bank, String bankCode, String codeEDRPOU, String inn,
+				String extraInformation) {
 		setId(id);
 		this.checkMark = checkMark;
 		this.businessName = businessName;
@@ -28,6 +30,7 @@ public class ShopSupplier {
 		setBankCode(bankCode);
 		setCodeEDRPOU(codeEDRPOU);
 		setInn(inn);
+		this.extraInformation = extraInformation;
 	}
 
 	private boolean checkAccountCurrent(String accountCurrent) {
@@ -59,7 +62,8 @@ public class ShopSupplier {
 			   + getAddress() + "\na/c " + getAccountCurrent()
 			   + "   MFO " + getBankCode() + "\nin a bank branch "
 			   + getBank() + "\nINN " + getInn() + "\ntel.: "
-			   + getPhoneNumber() + ", fax: " + getFax() + "\n";
+			   + getPhoneNumber() + ", fax: " + getFax()
+			   + "\nExtra Information:\n" + getExtraInformation();
 	}
 
 	public void setId(int id) {
@@ -160,12 +164,11 @@ public class ShopSupplier {
 		return inn;
 	}
 
-	// public static void main (String[] args) {
+	public String getExtraInformation() {
+		return extraInformation;
+	}
 
-	// 	Shop shop = new Shop(1, "Foxtrot", "Panteleymovskaya str, 25",
-	// 						 "(048)236-15-45", "(048)723-15-45",
-	// 						 "260015236974525", "OTP bank", "300568",
-	// 						 "87465123", "112233445566");
-	// 	System.out.println(shop.toString());
-	// }
+	public void setExtraInformation(String extraInformation) {
+		this.extraInformation = extraInformation;
+	}
 }
